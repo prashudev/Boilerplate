@@ -1,0 +1,26 @@
+cache:
+  key: "maven3"
+  paths:
+    - .m2/repository
+
+stages:
+  - test
+
+code_coverage:
+  image: maven:3-jdk-11
+  stage: test
+  only:
+    - master
+    - v1.0.0
+    - v1.0.1
+    - v1.0.2
+    - v1.0.3
+    - stage
+
+  script:
+    - mvn clean package
+    - mvn jacoco:report-aggregate
+    - cat coverage/target/site/jacoco-aggregate/index.html
+  artifacts:
+    paths:
+      - coverage/target/site/jacoco-aggregate/index.html
